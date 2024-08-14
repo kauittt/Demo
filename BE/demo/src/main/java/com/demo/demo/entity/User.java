@@ -1,5 +1,6 @@
 package com.demo.demo.entity;
 
+import com.demo.demo.dto.UserRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,4 +55,17 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Customer> customers;
+
+    public User(UserRequestDTO userRequestDTO) {
+        this.id = GenerateID.generateID();
+        this.username = userRequestDTO.getUsername();
+        this.password = userRequestDTO.getPassword();
+        this.email = userRequestDTO.getEmail();
+        this.name = userRequestDTO.getName();
+        this.phone = userRequestDTO.getPhone();
+        this.address = userRequestDTO.getAddress();
+        this.enabled = 1;
+        this.authorities = new ArrayList<>();
+        this.customers = new ArrayList<>();
+    }
 }
