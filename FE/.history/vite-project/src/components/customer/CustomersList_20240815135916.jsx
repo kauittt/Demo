@@ -1,12 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faChevronDown,
-    faSearch,
-    faPlus,
-    faCog,
-} from "@fortawesome/free-solid-svg-icons";
-import Modal from "../modals/ModalCustomer";
+import React from "react";
 
 const CustomersList = () => {
     const [count, setCount] = useState(0);
