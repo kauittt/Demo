@@ -1,8 +1,10 @@
 import React from 'react';
+// import './Modal.css'; 
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { useState } from 'preact/hooks';
 
-export default function Modal({ isOpen, onClose,onAddCustomer  }) {
+export default function ModalCustomer({ isOpen, onClose,onAddCustomer  }) {
 
     if (!isOpen) return null; 
     return (
@@ -11,7 +13,7 @@ export default function Modal({ isOpen, onClose,onAddCustomer  }) {
                 <button className="absolute top-2.5 right-2.5 border-none bg-transparent text-2xl cursor-pointer-close" onClick={onClose}>
                     &times;
                 </button>
-                <h1 className='text-4xl m-3'>Add Customer</h1>
+                <h1 className='text-4xl m-3 text-left'>Add Customer</h1>
                 <Formik
                     initialValues={{
                         id: "",
@@ -37,7 +39,7 @@ export default function Modal({ isOpen, onClose,onAddCustomer  }) {
                     {formik => (
                         <Form>
                             <div className='m-3'>
-                                <label htmlFor="No" className='block'>No</label>
+                                <label htmlFor="No" className='block text-left'>No</label>
                                 <Field
                                     name="id"
                                     type="text"
@@ -46,8 +48,8 @@ export default function Modal({ isOpen, onClose,onAddCustomer  }) {
                                 />
                                 <ErrorMessage name='id' component="div" className=' text-sm mt-1 text-red' />
                             </div>
-                            <div className='m-3'>
-                                <label htmlFor="name" className='block'>Name</label>
+                            <div className='m-3 justify-start'>
+                                <label htmlFor="name" className='block text-left'>Name</label>
                                 <Field
                                     name="name"
                                     type="text"
@@ -57,7 +59,7 @@ export default function Modal({ isOpen, onClose,onAddCustomer  }) {
                                 <ErrorMessage name='name' component="div" className=' text-sm mt-1 text-red' />
                             </div>
                             <div className='m-3'>
-                                <label htmlFor="phone" className='block'>Phone</label>
+                                <label htmlFor="phone" className='block text-left'>Phone</label>
                                 <Field
                                     name="phone"
                                     type="text"
@@ -68,7 +70,7 @@ export default function Modal({ isOpen, onClose,onAddCustomer  }) {
                             </div>
                             <div className='flex space-x-4'>
                                 <div className='mx-3 flex-1'>
-                                    <label htmlFor="contact" className='block'>Contact</label>
+                                    <label htmlFor="contact" className='block text-left'>Contact</label>
                                     <Field
                                         name="contact"
                                         type="text"
@@ -78,7 +80,7 @@ export default function Modal({ isOpen, onClose,onAddCustomer  }) {
                                     <ErrorMessage name='contact' component="div" className=' text-sm mt-1 text-red' />
                                 </div>
                                 <div className='mx-3 flex-1'>
-                                    <label htmlFor="price" className='block'>Price</label>
+                                    <label htmlFor="price" className='flex text-left'>Price</label>
                                     <Field
                                         name="price"
                                         type="text"

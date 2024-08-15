@@ -1,5 +1,5 @@
 import { render } from 'preact'
-import { App } from './components/page/customers'
+import { CustomersList } from './components/customer/CustomersList'
 import './index.css'
 
-render(<App />, document.getElementById('app'))
+render(<CustomersList />, document.getElementById('app'))
