@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faSearch, faPlus, faCog } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../modals/modal";
-export function App() {
+import Modal from "../modals/ModalCustomer";
+export function CustomersList() {
     const [count, setCount] = useState(0);
     const [action, setAction] = useState("-1");
     const dropdownRef = useRef(null);
