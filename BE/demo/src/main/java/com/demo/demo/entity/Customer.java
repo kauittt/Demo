@@ -1,10 +1,8 @@
 package com.demo.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 
 @NoArgsConstructor
@@ -13,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "customers")
+@ToString
 public class Customer {
     @Id
     @Column(name = "id")
@@ -31,4 +30,5 @@ public class Customer {
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "userId")
     private User user;
+
 }
