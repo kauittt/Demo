@@ -1,11 +1,11 @@
 import { Field, useField } from "formik";
 import PropTypes from "prop-types";
 
-const FormInput = ({ label, type = "text", ...props }) => {
+const FormInput = ({ label, type = "text", width = "", ...props }) => {
     const [field, meta] = useField(props);
 
     return (
-        <div className="flex flex-col gap-[10px] w-[320px]">
+        <div className={`flex flex-col gap-[10px] ${width}`}>
             <label
                 className="font-semibold text-lg"
                 htmlFor={props.id || props.name}
@@ -37,6 +37,7 @@ FormInput.propTypes = {
     name: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     type: PropTypes.string,
+    className: PropTypes.string,
 };
 
 export default FormInput;
