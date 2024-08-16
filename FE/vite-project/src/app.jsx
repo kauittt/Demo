@@ -1,4 +1,6 @@
-import LoginPage from "./components/page/LoginPage";
+import { BrowserRouter as Router } from "react-router-dom";
+import AnimateRoute from "./Route/AnimateRoute";
+import { ToastContainer } from "react-toastify";
 
 export function App() {
     console.log(window.innerHeight);
@@ -7,8 +9,9 @@ export function App() {
     // 1920 - 1024
     // 0.8 - 0.7
     return (
-        <div className="flex flex-center ">
-            <LoginPage></LoginPage>
-        </div>
+        <Router>
+            <AnimateRoute></AnimateRoute>
+            <ToastContainer />
+        </Router>
     );
 }
