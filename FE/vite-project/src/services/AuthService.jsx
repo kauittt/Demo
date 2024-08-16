@@ -4,7 +4,7 @@ const AuthService = {
     postLogin: (body) => {
         return axios
             .create({
-                baseURL: "http://localhost:8080/",
+                baseURL: "http://localhost:8081/",
                 timeout: 5000,
                 headers: {
                     "Content-Type": "application/json",
@@ -21,7 +21,7 @@ const AuthService = {
     postRegister: (body) => {
         return axios
             .create({
-                baseURL: "http://localhost:8080/",
+                baseURL: "http://localhost:8081/",
                 timeout: 5000,
                 headers: {
                     "Content-Type": "application/json",

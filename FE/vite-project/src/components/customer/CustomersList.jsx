@@ -1,10 +1,21 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faSearch, faPlus, faCog, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+    faChevronDown,
+    faSearch,
+    faPlus,
+    faCog,
+    faChevronLeft,
+    faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/ModalCustomer";
 import { get, post } from "../../utils/httpRequest";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomersList() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [customerList, setCustomerList] = useState([]);
     const [action, setAction] = useState("-1");
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +25,12 @@ export default function CustomersList() {
 
     const dropdownRef = useRef(null);
 
+    useEffect(() => {
+        const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+        if (!accessToken) {
+            navigate("/login");
+        }
+    }, [navigate]);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -25,32 +42,37 @@ export default function CustomersList() {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
                 setAction(-1);
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     useEffect(() => {
         const searchCustomer = async () => {
             if (keyword.trim() !== "") {
                 try {
-                    const response = await get('/customers/search', { params: { keyword } });
+                    const response = await get("/customers/search", {
+                        params: { keyword },
+                    });
                     setCustomerList(response);
                 } catch (error) {
-                    console.log('Error searching:', error);
+                    console.log("Error searching:", error);
                 }
-            }
-            else fetchData()
+            } else fetchData();
         };
         searchCustomer();
     }, [keyword]);
 
     const handleAddCustomer = async (newCustomer) => {
         try {
-            const res = await post('/customers/add_customer', newCustomer);
+            const res = await post("/customers/add_customer", newCustomer);
             setCustomerList([...customerList, res]);
             closeModal();
         } catch (error) {
@@ -61,14 +83,16 @@ export default function CustomersList() {
 
     const handleDeleteCustomer = async (customer) => {
         try {
-            const res = await post('/customers/delete_customer', customer);
-            setCustomerList(customerList.filter(c => c.id !== customer.id));
+            const res = await post("/customers/delete_customer", customer);
+            setCustomerList(customerList.filter((c) => c.id !== customer.id));
         } catch (error) {
             console.error(error);
-            alert("Failed to delete customer: " + (error.response?.data?.message || error.message));
+            alert(
+                "Failed to delete customer: " +
+                    (error.response?.data?.message || error.message)
+            );
         }
     };
-
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -90,8 +114,13 @@ export default function CustomersList() {
                 <div className="w-[220px] m-10 mx-20 h-[77px] flex rounded-3xl bg-white shadow-lg">
                     <div className="w-[182px] h-[45px] justify-center flex m-auto gap-2">
                         <img className="h-[45px] w-[45px]" alt=""></img>
-                        <p className="text-base self-center text-text">Carter Smith</p>
-                        <FontAwesomeIcon icon={faChevronDown} className="self-center text-text"></FontAwesomeIcon>
+                        <p className="text-base self-center text-text">
+                            Carter Smith
+                        </p>
+                        <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className="self-center text-text"
+                        ></FontAwesomeIcon>
                     </div>
                 </div>
             </div>
@@ -99,7 +128,10 @@ export default function CustomersList() {
                 <div className="inline-flex flex-1 mx-20 items-center justify-center gap-10">
                     <p className="text-text text-2xl">Customers</p>
                     <div className="bg-white flex-1 h-[42px] rounded-xl border-text border-2 items-center px-16 gap-10 flex">
-                        <FontAwesomeIcon icon={faSearch} className="self-center text-text"></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                            icon={faSearch}
+                            className="self-center text-text"
+                        ></FontAwesomeIcon>
                         <input
                             type="text"
                             placeholder="Search customers..."
@@ -111,8 +143,14 @@ export default function CustomersList() {
                             value={keyword}
                         />
                     </div>
-                    <button className="inline-flex px-4 h-[42px] items-center gap-4 bg-text rounded-xl" onClick={openModal}>
-                        <FontAwesomeIcon icon={faPlus} className="self-center text-white"></FontAwesomeIcon>
+                    <button
+                        className="inline-flex px-4 h-[42px] items-center gap-4 bg-text rounded-xl"
+                        onClick={openModal}
+                    >
+                        <FontAwesomeIcon
+                            icon={faPlus}
+                            className="self-center text-white"
+                        ></FontAwesomeIcon>
                         <p className="text-white">New Customer</p>
                     </button>
                 </div>
@@ -135,22 +173,37 @@ export default function CustomersList() {
                                 <td className="text-center p-3">{item.id}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">{item.phone}</td>
-                                <td className="text-center">{item.contact ? item.contact : ""}</td>
+                                <td className="text-center">
+                                    {item.contact ? item.contact : ""}
+                                </td>
                                 <td className="text-center">{item.price}</td>
                                 <td className="text-center w-32">
                                     <button onClick={() => setAction(index)}>
-                                        <FontAwesomeIcon icon={faChevronDown} className="self-center text-text" />
+                                        <FontAwesomeIcon
+                                            icon={faChevronDown}
+                                            className="self-center text-text"
+                                        />
                                     </button>
                                     {action === index && (
-                                        <div ref={dropdownRef} className="absolute block border-2 rounded-xl ml-7 mt-1 bg-white border-text">
+                                        <div
+                                            ref={dropdownRef}
+                                            className="absolute block border-2 rounded-xl ml-7 mt-1 bg-white border-text"
+                                        >
                                             <ul>
                                                 <li>
-                                                    <button className="hover:bg-main w-[70px] p-2 rounded-xl">Edit</button>
+                                                    <button className="hover:bg-main w-[70px] p-2 rounded-xl">
+                                                        Edit
+                                                    </button>
                                                 </li>
                                                 <li>
                                                     <button
-                                                        onClick={() => handleDeleteCustomer(item)}
-                                                        className="hover:bg-main w-[70px] p-2 rounded-xl">
+                                                        onClick={() =>
+                                                            handleDeleteCustomer(
+                                                                item
+                                                            )
+                                                        }
+                                                        className="hover:bg-main w-[70px] p-2 rounded-xl"
+                                                    >
                                                         Delete
                                                     </button>
                                                 </li>
@@ -168,33 +221,46 @@ export default function CustomersList() {
                 <div className="inline-flex items-center w-1/3 ">
                     <div className="ml-20 mr-10">
                         <div className=" rounded-lg px-3 p-2 shadow-xl bg-white">
-                            <FontAwesomeIcon icon={faCog} className="self-center text-text">
-                            </FontAwesomeIcon>
+                            <FontAwesomeIcon
+                                icon={faCog}
+                                className="self-center text-text"
+                            ></FontAwesomeIcon>
                         </div>
                     </div>
-                    <div className="border-b-2 px-3 border-text">{totalPages}</div>
+                    <div className="border-b-2 px-3 border-text">
+                        {totalPages}
+                    </div>
                     <p className="mx-5">Show on page</p>
                 </div>
                 <div className="inline-flex w-1/3 justify-center items-center">
                     <button
                         onClick={goToPreviousPage}
-                        disabled={currentPage === 1}>
-                        <FontAwesomeIcon icon={faChevronLeft} className="self-center text-text ">
-                        </FontAwesomeIcon>
+                        disabled={currentPage === 1}
+                    >
+                        <FontAwesomeIcon
+                            icon={faChevronLeft}
+                            className="self-center text-text "
+                        ></FontAwesomeIcon>
                     </button>
                     <div className="px-3 p-2 bg-white mx-10">{currentPage}</div>
                     <button
                         onClick={goToNextPage}
-                        disabled={currentPage === totalPages}>
-                        <FontAwesomeIcon icon={faChevronRight} className="self-center text-text">
-                        </FontAwesomeIcon>
+                        disabled={currentPage === totalPages}
+                    >
+                        <FontAwesomeIcon
+                            icon={faChevronRight}
+                            className="self-center text-text"
+                        ></FontAwesomeIcon>
                     </button>
                 </div>
                 <div className="w-1/3"></div>
             </div>
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} onAddCustomer={handleAddCustomer}>
-            </Modal>
+            <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onAddCustomer={handleAddCustomer}
+            ></Modal>
         </div>
     );
 }

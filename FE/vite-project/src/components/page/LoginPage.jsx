@@ -5,22 +5,27 @@ import * as Yup from "yup";
 import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
 import AuthService from "../../services/AuthService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
     const [purpose, setPurpose] = useState("login");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+        if (accessToken) {
+            navigate("/home");
+        }
+    }, [navigate]);
 
     const registerFields =
         purpose == "register" ? ["email", "name", "phone", "address"] : [];
-    const formInputs = ["username", "password", ...registerFields];
-
-    const fields = [
-        "username",
-        "password",
-        "email",
-        "name",
-        "phone",
-        "address",
-    ];
+    const fields = ["username", "password", ...registerFields];
 
     const gridCol = purpose == "login" ? "grid-cols-1" : "grid-cols-2";
 
@@ -30,16 +35,18 @@ const LoginPage = () => {
             .max(15, "Must be 15 characters or less!")
             .required("Username is required"),
         password: Yup.string().required("Password is required"),
-        email: Yup.string()
-            .email("Invalid email")
-            .required("Email is required"),
-        name: Yup.string().required("Name is required"),
-        phone: Yup.string()
-            .matches(/^[0-9]+$/, "Phone number must contain only numbers")
-            .min(10, "Phone number must be 10 digits")
-            .max(10, "Phone number must be 10 digits")
-            .required("Phone number is required"),
-        address: Yup.string().required("Address is required"),
+        ...(purpose == "register" && {
+            email: Yup.string()
+                .email("Invalid email")
+                .required("Email is required"),
+            name: Yup.string().required("Name is required"),
+            phone: Yup.string()
+                .matches(/^[0-9]+$/, "Phone number must contain only numbers")
+                .min(10, "Phone number must be 10 digits")
+                .max(10, "Phone number must be 10 digits")
+                .required("Phone number is required"),
+            address: Yup.string().required("Address is required"),
+        }),
     });
 
     //* resetForm: Reset về init values, xóa error
@@ -95,17 +102,31 @@ const LoginPage = () => {
     const doLogin = async (credentials) => {
         try {
             const response = await AuthService.postLogin(credentials);
-            console.log(response);
+            const accessToken = response.data.accessToken || null;
 
-            if (response?.data?.accessToken) {
+            if (accessToken) {
+                const decoded = jwtDecode(accessToken);
+
                 localStorage.setItem(
                     "accessToken",
-                    JSON.stringify(response.data.accessToken)
+                    JSON.stringify(accessToken)
                 );
 
-                // navigate("/home");
+                localStorage.setItem("user", JSON.stringify(decoded.user));
+
+                toast.info("Login successfully", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                navigate("/home");
             }
         } catch (error) {
+            console.log(error);
             toast.error(handleError(error), {
                 position: "top-right",
                 autoClose: 5000,
@@ -120,8 +141,8 @@ const LoginPage = () => {
 
     const doRegister = async (credentials) => {
         try {
-            const response = await LoginService.Register(credentials);
-            const data = response.data;
+            const response = await AuthService.postRegister(credentials);
+            const data = response?.data;
 
             if (data) {
                 setPurpose("login");
@@ -163,12 +184,14 @@ const LoginPage = () => {
             {/*//* Form  */}
             <Formik
                 initialValues={{
-                    username: "",
-                    password: "",
-                    email: "",
-                    name: "",
-                    phone: "",
-                    address: "",
+                    username: "minh",
+                    password: "minh",
+                    ...(purpose == "register" && {
+                        email: "",
+                        name: "",
+                        phone: "",
+                        address: "",
+                    }),
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => {
@@ -189,7 +212,7 @@ const LoginPage = () => {
                     <Form className="flex flex-center flex-col flex-1 gap-[40px]">
                         <FormReset setPurpose={purpose} />
                         <div className={`grid gap-[20px] ${gridCol}`}>
-                            {formInputs?.map((field, index) => {
+                            {fields?.map((field, index) => {
                                 let inputType = "text";
                                 if (field === "password") {
                                     inputType = "password";
