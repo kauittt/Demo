@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./../../elements/Button";
 import { selectUser, userLogout } from "../../redux/slice/userSlice";
-import { toast } from "react-toastify";
 
 export default function CustomersList() {
     const navigate = useNavigate();

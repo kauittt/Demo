@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./../../elements/Button";
 import { selectUser, userLogout } from "../../redux/slice/userSlice";
-import { toast } from "react-toastify";
 
 export default function CustomersList() {
     const navigate = useNavigate();
@@ -25,15 +24,6 @@ export default function CustomersList() {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
         dispatch(userLogout());
-        toast.info("Logout successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
     };
 
     const [customerList, setCustomerList] = useState([]);
@@ -169,7 +159,7 @@ export default function CustomersList() {
                             >
                                 <Link
                                     to="/login"
-                                    className=" w-full p-[12px] rounded hover:bg-hover hover:shadow-custom font-semibold
+                                    className=" w-full p-[10px] rounded hover:bg-bgr-main hover:shadow-custom font-semibold
                                     transition-base"
                                     onClick={logout}
                                 >

@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./../../elements/Button";
 import { selectUser, userLogout } from "../../redux/slice/userSlice";
-import { toast } from "react-toastify";
 
 export default function CustomersList() {
     const navigate = useNavigate();
@@ -25,15 +24,6 @@ export default function CustomersList() {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
         dispatch(userLogout());
-        toast.info("Logout successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
     };
 
     const [customerList, setCustomerList] = useState([]);
@@ -136,10 +126,7 @@ export default function CustomersList() {
             flex flex-col gap-[30px]"
             >
                 {/*//* Avatar  */}
-                <div
-                    className="relative transition-base
-                 flex justify-end cursor-pointer"
-                >
+                <div className="relative flex justify-end cursor-pointer">
                     <div
                         className=" w-[200px] h-[50px] rounded-3xl 
                     bg-white shadow-custom
@@ -158,26 +145,26 @@ export default function CustomersList() {
                             icon={faChevronDown}
                             className=" text-main"
                         ></FontAwesomeIcon>
+                    </div>
 
-                        {isHovering && (
-                            <div
-                                className="flex flex-col items-end justify-center gap-[10px]
+                    {isHovering && (
+                        <div
+                            className="flex flex-col items-end justify-center gap-[10px]
+                               w-[110px] p-[10px]
                                 absolute top-[50px] right-0
                                 bg-bgr-white shadow-custom rounded-lg
-                                text-base text-right bg-white
-                                transition-base"
-                            >
-                                <Link
-                                    to="/login"
-                                    className=" w-full p-[12px] rounded hover:bg-hover hover:shadow-custom font-semibold
+                            text-base text-right bg-white"
+                        >
+                            <Link
+                                to="/login"
+                                className=" w-full p-[5px] rounded hover:bg-bgr-main hover:shadow-custom
                                     transition-base"
-                                    onClick={logout}
-                                >
-                                    Log out
-                                </Link>
-                            </div>
-                        )}
-                    </div>
+                                onClick={logout}
+                            >
+                                Log out
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
                 {/*//* Search - Add Button  */}
