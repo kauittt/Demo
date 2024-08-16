@@ -4,9 +4,24 @@ import { useEffect, useState } from "preact/hooks";
 import * as Yup from "yup";
 import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
+import AuthService from "../../services/AuthService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
     const [purpose, setPurpose] = useState("login");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+        if (accessToken) {
+            navigate("/home");
+        }
+    }, [navigate]);
 
     const registerFields =
         purpose == "register" ? ["email", "name", "phone", "address"] : [];
@@ -43,6 +58,118 @@ const LoginPage = () => {
         }, [setPurpose, resetForm]);
         return null;
     };
+
+    const handleError = (error) => {
+        let message = "An unexpected error occurred. Please try again.";
+
+        if (error.code) {
+            switch (error.code) {
+                case "ERR_BAD_REQUEST":
+                    message =
+                        purpose == "login"
+                            ? "Incorrect username or password."
+                            : "Username may already be in use.";
+                    break;
+                case "ERR_NETWORK":
+                    message =
+                        "Service temporarily unavailable. Please try again later.";
+                    break;
+                default:
+                    message =
+                        "An unexpected error occurred with code: " + error.code;
+                    break;
+            }
+        } else if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    message = "Unauthorized. Please login again.";
+                    break;
+                case 404:
+                    message = "Requested resource not found.";
+                    break;
+                case 500:
+                    message = "Internal server error. Please try again later.";
+                    break;
+                default:
+                    message = error.response.data.message || message;
+                    break;
+            }
+        }
+
+        return message;
+    };
+
+    const doLogin = async (credentials) => {
+        try {
+            const response = await AuthService.postLogin(credentials);
+            const accessToken = response.data.accessToken || null;
+
+            if (accessToken) {
+                const decoded = jwtDecode(accessToken);
+
+                localStorage.setItem(
+                    "accessToken",
+                    JSON.stringify(accessToken)
+                );
+
+                localStorage.setItem("user", JSON.stringify(decoded.user));
+
+                toast.info("Login successfully", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                navigate("/home");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(handleError(error), {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
+
+    const doRegister = async (credentials) => {
+        try {
+            const response = await AuthService.postRegister(credentials);
+            const data = response?.data;
+
+            if (data) {
+                setPurpose("login");
+                toast.info("Registered successfully", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    fontWeight: 600,
+                });
+            }
+        } catch (error) {
+            toast.error(handleError(error), {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
+
     return (
         <div className="flex w-full h-screen">
             {/*//* Image */}
@@ -57,8 +184,8 @@ const LoginPage = () => {
             {/*//* Form  */}
             <Formik
                 initialValues={{
-                    username: "",
-                    password: "",
+                    username: "minh",
+                    password: "minh",
                     ...(purpose == "register" && {
                         email: "",
                         name: "",
@@ -70,6 +197,11 @@ const LoginPage = () => {
                 onSubmit={(values, actions) => {
                     console.log("Submit");
                     console.log(values);
+                    if (purpose == "login") {
+                        doLogin(values);
+                    } else if (purpose == "register") {
+                        doRegister(values);
+                    }
                     setTimeout(() => {
                         actions.resetForm();
                         actions.setSubmitting(false);
