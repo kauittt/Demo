@@ -1,18 +1,16 @@
 import React from "react";
-import { Form, Formik, useFormikContext } from "formik";
-import { useEffect, useState } from "preact/hooks";
+import { Form, Formik } from "formik";
+import { useState } from "preact/hooks";
 import * as Yup from "yup";
 import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
 
 const LoginPage = () => {
-    const [purpose, setPurpose] = useState("login");
+    const [purpose, setPurpose] = useState("register");
 
     const registerFields =
         purpose == "register" ? ["email", "name", "phone", "address"] : [];
     const fields = ["username", "password", ...registerFields];
-
-    const gridCol = purpose == "login" ? "grid-cols-1" : "grid-cols-2";
 
     const validationSchema = Yup.object({
         username: Yup.string()
@@ -33,24 +31,14 @@ const LoginPage = () => {
             address: Yup.string().required("Address is required"),
         }),
     });
-
-    //* resetForm: Reset về init values, xóa error
-    //* Thêm resetForm vào dependencies để cho chắc chắn, cơ bản thì bỏ cũng đc
-    const FormReset = ({ setPurpose }) => {
-        const { resetForm } = useFormikContext();
-        useEffect(() => {
-            resetForm();
-        }, [setPurpose, resetForm]);
-        return null;
-    };
     return (
         <div className="flex w-full h-screen">
             {/*//* Image */}
-            <div className="w-1/2 flex flex-center">
+            <div className="w-1/2 flex flex-center shadow-custom">
                 <img
                     src="./image/login.png"
                     alt="Description"
-                    className="max-w-[550px] w-full object-cover"
+                    className="max-w-[320px] w-full object-cover shadow-custom"
                 />
             </div>
 
@@ -71,33 +59,30 @@ const LoginPage = () => {
                     console.log("Submit");
                     console.log(values);
                     setTimeout(() => {
-                        actions.resetForm();
+                        // actions.resetForm();
                         actions.setSubmitting(false);
                     }, 500);
                 }}
             >
                 {({ isSubmitting }) => (
-                    <Form className="flex flex-center flex-col flex-1 gap-[40px]">
-                        <FormReset setPurpose={purpose} />
-                        <div className={`grid gap-[20px] ${gridCol}`}>
-                            {fields?.map((field, index) => {
-                                let inputType = "text";
-                                if (field === "password") {
-                                    inputType = "password";
-                                } else if (field === "email") {
-                                    inputType = "email";
-                                }
-                                return (
-                                    <FormInput
-                                        label={field}
-                                        id={field}
-                                        name={field}
-                                        type={inputType}
-                                        placeholder={`Enter your ${field}`}
-                                    ></FormInput>
-                                );
-                            })}
-                        </div>
+                    <Form className="grid grid-cols-2 gap-4 flex-1">
+                        {fields?.map((field, index) => {
+                            let inputType = "text";
+                            if (field === "password") {
+                                inputType = "password";
+                            } else if (field === "email") {
+                                inputType = "email";
+                            }
+                            return (
+                                <FormInput
+                                    label={field}
+                                    id={field}
+                                    name={field}
+                                    type={inputType}
+                                    placeholder={`Enter your ${field}`}
+                                ></FormInput>
+                            );
+                        })}
 
                         {/*//* Buttons */}
                         <div className="flex gap-[10px] justify-end">
@@ -130,3 +115,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+("");

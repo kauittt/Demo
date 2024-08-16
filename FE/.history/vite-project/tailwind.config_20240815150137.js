@@ -3,14 +3,14 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
         colors: {
-            main: "#109CF1", //* Màu chủ đạo
-            text: "#3A3A49", //* Màu chữ
-            white: "#FFF", //* Trắng
-            bgr: "#F5F5F5", //* Background
-            border: "#EBEFF2", //* Customer Item's Border
-            grey: "#C2C2C2", //* Input border
-            black: "#000",
-            red: "#FD4848", //* Error, Avatar
+            main: "#f5f5f5", //* Màu chủ đạo
+            text: "#109CF1", //* Màu chữ
+            hover: "#F2F9FF", //* Màu khi hover
+            white: "#fff", //* Trắng
+            bgr: "#F5F6F8", //* Background
+            grey: "lightgrey",
+            black: "black",
+            red: "red",
         },
         extend: {
             fontFamily: {

@@ -1,18 +1,16 @@
 import React from "react";
-import { Form, Formik, useFormikContext } from "formik";
-import { useEffect, useState } from "preact/hooks";
+import { Form, Formik } from "formik";
+import { useState } from "preact/hooks";
 import * as Yup from "yup";
 import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
 
 const LoginPage = () => {
-    const [purpose, setPurpose] = useState("login");
+    const [purpose, setPurpose] = useState("register");
 
     const registerFields =
         purpose == "register" ? ["email", "name", "phone", "address"] : [];
     const fields = ["username", "password", ...registerFields];
-
-    const gridCol = purpose == "login" ? "grid-cols-1" : "grid-cols-2";
 
     const validationSchema = Yup.object({
         username: Yup.string()
@@ -33,16 +31,6 @@ const LoginPage = () => {
             address: Yup.string().required("Address is required"),
         }),
     });
-
-    //* resetForm: Reset về init values, xóa error
-    //* Thêm resetForm vào dependencies để cho chắc chắn, cơ bản thì bỏ cũng đc
-    const FormReset = ({ setPurpose }) => {
-        const { resetForm } = useFormikContext();
-        useEffect(() => {
-            resetForm();
-        }, [setPurpose, resetForm]);
-        return null;
-    };
     return (
         <div className="flex w-full h-screen">
             {/*//* Image */}
@@ -50,7 +38,7 @@ const LoginPage = () => {
                 <img
                     src="./image/login.png"
                     alt="Description"
-                    className="max-w-[550px] w-full object-cover"
+                    className="max-w-[320px] w-full object-cover"
                 />
             </div>
 
@@ -71,56 +59,63 @@ const LoginPage = () => {
                     console.log("Submit");
                     console.log(values);
                     setTimeout(() => {
-                        actions.resetForm();
+                        // actions.resetForm();
                         actions.setSubmitting(false);
                     }, 500);
                 }}
             >
                 {({ isSubmitting }) => (
-                    <Form className="flex flex-center flex-col flex-1 gap-[40px]">
-                        <FormReset setPurpose={purpose} />
-                        <div className={`grid gap-[20px] ${gridCol}`}>
-                            {fields?.map((field, index) => {
-                                let inputType = "text";
-                                if (field === "password") {
-                                    inputType = "password";
-                                } else if (field === "email") {
-                                    inputType = "email";
-                                }
-                                return (
-                                    <FormInput
-                                        label={field}
-                                        id={field}
-                                        name={field}
-                                        type={inputType}
-                                        placeholder={`Enter your ${field}`}
-                                    ></FormInput>
-                                );
-                            })}
+                    <Form className="relative">
+                        <div className="grid grid-cols-2 gap-x-[50px] gap-y-[30px]">
+                            <FormInput
+                                label="Name"
+                                id="name"
+                                name="name"
+                                placeholder="Enter your full name"
+                            />
+                            <FormInput
+                                label="Email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                type="email"
+                            />
+                            <FormInput
+                                label="Username"
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                            />
+                            <div className="pointer-events-none">
+                                <FormInput
+                                    label="Password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    type="password"
+                                />
+                            </div>
+                            <FormInput
+                                label="Phone"
+                                id="phone"
+                                name="phone"
+                                placeholder="Enter your phone number"
+                            />
+                            <FormInput
+                                label="Address"
+                                id="address"
+                                name="address"
+                                placeholder="Enter your address"
+                            />
                         </div>
 
-                        {/*//* Buttons */}
-                        <div className="flex gap-[10px] justify-end">
+                        <div className="flex justify-end">
                             <Button
-                                name={
-                                    purpose === "login" ? "Register" : "Login"
-                                }
-                                onClick={() =>
-                                    setPurpose(
-                                        purpose === "login"
-                                            ? "register"
-                                            : "login"
-                                    )
-                                }
-                            />
-
-                            <Button
-                                name={
-                                    purpose === "login" ? "Login" : "Register"
-                                }
+                                name="Save"
                                 type="submit"
                                 disabled={isSubmitting}
                             />
+                            <ToastContainer />
                         </div>
                     </Form>
                 )}
