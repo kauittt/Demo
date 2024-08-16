@@ -1,154 +1,97 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faChevronDown,
-    faSearch,
-    faPlus,
-    faCog,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faSearch, faPlus, faCog, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/ModalCustomer";
+import { get, post } from "../../utils/httpRequest";
 
-const CustomersList = () => {
-    const [count, setCount] = useState(0);
+export default function CustomersList() {
+    const [customerList, setCustomerList] = useState([]);
     const [action, setAction] = useState("-1");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [keyword, setKeyword] = useState("");
+
     const dropdownRef = useRef(null);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+    const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const array = [
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-        {
-            id: "01231",
-            name: "TEST",
-            phone: "",
-            contact: "",
-            price: 10,
-        },
-    ];
-
-    const handleAddCustomer = (newCustomer) => {
-        console.log(newCustomer);
-        setCustomers([...customers, newCustomer]); // Thêm khách hàng mới vào danh sách
-        closeModal(); // Đóng modal sau khi thêm xong
-    };
-    const [customers, setCustomers] = useState(array);
+    async function fetchData() {
+        let responseCustomer = await get("/customers/all_customer");
+        setCustomerList(responseCustomer);
+    }
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target)
-            ) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setAction(-1);
             }
         };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () =>
-            document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        const searchCustomer = async () => {
+            if (keyword.trim() !== "") {
+                try {
+                    const response = await get('/customers/search', { params: { keyword } });
+                    setCustomerList(response);
+                } catch (error) {
+                    console.log('Error searching:', error);
+                }
+            }
+            else fetchData()
+        };
+        searchCustomer();
+    }, [keyword]);
+
+    const handleAddCustomer = async (newCustomer) => {
+        try {
+            const res = await post('/customers/add_customer', newCustomer);
+            setCustomerList([...customerList, res]);
+            closeModal();
+        } catch (error) {
+            console.log(error);
+            alert("Id has exist: " + error);
+        }
+    };
+
+    const handleDeleteCustomer = async (customer) => {
+        try {
+            const res = await post('/customers/delete_customer', customer);
+            setCustomerList(customerList.filter(c => c.id !== customer.id));
+        } catch (error) {
+            console.error(error);
+            alert("Failed to delete customer: " + (error.response?.data?.message || error.message));
+        }
+    };
+
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = customerList.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(customerList.length / itemsPerPage);
+
+    const goToNextPage = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
+
+    const goToPreviousPage = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
 
     return (
         <div className="w-screen h-screen bg-main">
             <div className="flex justify-end">
                 <div className="w-[220px] m-10 mx-20 h-[77px] flex rounded-3xl bg-white shadow-lg">
                     <div className="w-[182px] h-[45px] justify-center flex m-auto gap-2">
-                        <img className="h-[45px] w-[45px]"></img>
-                        <p className="text-base self-center text-text">
-                            Carter smith
-                        </p>
-                        <FontAwesomeIcon
-                            icon={faChevronDown}
-                            className="self-center text-text"
-                        ></FontAwesomeIcon>
+                        <img className="h-[45px] w-[45px]" alt=""></img>
+                        <p className="text-base self-center text-text">Carter Smith</p>
+                        <FontAwesomeIcon icon={faChevronDown} className="self-center text-text"></FontAwesomeIcon>
                     </div>
                 </div>
             </div>
@@ -156,24 +99,20 @@ const CustomersList = () => {
                 <div className="inline-flex flex-1 mx-20 items-center justify-center gap-10">
                     <p className="text-text text-2xl">Customers</p>
                     <div className="bg-white flex-1 h-[42px] rounded-xl border-text border-2 items-center px-16 gap-10 flex">
-                        <FontAwesomeIcon
-                            icon={faSearch}
-                            className="self-center text-text"
-                        ></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={faSearch} className="self-center text-text"></FontAwesomeIcon>
                         <input
                             type="text"
                             placeholder="Search customers..."
                             className="placeholder-text flex-1"
+                            onChange={(event) => {
+                                const newValue = event.target.value;
+                                setKeyword(newValue);
+                            }}
+                            value={keyword}
                         />
                     </div>
-                    <button
-                        className="inline-flex px-4 h-[42px] items-center gap-4 bg-text rounded-xl"
-                        onClick={openModal}
-                    >
-                        <FontAwesomeIcon
-                            icon={faPlus}
-                            className="self-center text-white"
-                        ></FontAwesomeIcon>
+                    <button className="inline-flex px-4 h-[42px] items-center gap-4 bg-text rounded-xl" onClick={openModal}>
+                        <FontAwesomeIcon icon={faPlus} className="self-center text-white"></FontAwesomeIcon>
                         <p className="text-white">New Customer</p>
                     </button>
                 </div>
@@ -191,33 +130,27 @@ const CustomersList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {customers.map((item, index) => (
+                        {currentItems.map((item, index) => (
                             <tr key={index}>
                                 <td className="text-center p-3">{item.id}</td>
                                 <td className="text-center">{item.name}</td>
                                 <td className="text-center">{item.phone}</td>
-                                <td className="text-center">{item.contact}</td>
+                                <td className="text-center">{item.contact ? item.contact : ""}</td>
                                 <td className="text-center">{item.price}</td>
                                 <td className="text-center w-32">
                                     <button onClick={() => setAction(index)}>
-                                        <FontAwesomeIcon
-                                            icon={faChevronDown}
-                                            className="self-center text-text"
-                                        />
+                                        <FontAwesomeIcon icon={faChevronDown} className="self-center text-text" />
                                     </button>
-                                    {action == index && (
-                                        <div
-                                            ref={dropdownRef}
-                                            className="absolute block border-2 rounded-xl ml-7 mt-1 bg-white border-text"
-                                        >
+                                    {action === index && (
+                                        <div ref={dropdownRef} className="absolute block border-2 rounded-xl ml-7 mt-1 bg-white border-text">
                                             <ul>
                                                 <li>
-                                                    <button className="hover:bg-main w-[70px] p-2 rounded-xl">
-                                                        Edit
-                                                    </button>
+                                                    <button className="hover:bg-main w-[70px] p-2 rounded-xl">Edit</button>
                                                 </li>
                                                 <li>
-                                                    <button className="hover:bg-main w-[70px] p-2 rounded-xl">
+                                                    <button
+                                                        onClick={() => handleDeleteCustomer(item)}
+                                                        className="hover:bg-main w-[70px] p-2 rounded-xl">
                                                         Delete
                                                     </button>
                                                 </li>
@@ -230,32 +163,38 @@ const CustomersList = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="inline-flex min-w-full justify-between ">
+
+            <div className="inline-flex min-w-full justify-between absolute bottom-28">
                 <div className="inline-flex items-center w-1/3 ">
                     <div className="ml-20 mr-10">
-                        <div className=" rounded-lg px-3 p-2 shadow-xl">
-                            <FontAwesomeIcon
-                                icon={faCog}
-                                className="self-center text-text"
-                            ></FontAwesomeIcon>
+                        <div className=" rounded-lg px-3 p-2 shadow-xl bg-white">
+                            <FontAwesomeIcon icon={faCog} className="self-center text-text">
+                            </FontAwesomeIcon>
                         </div>
                     </div>
-                    <div className="border-b-2 px-3 border-text">10</div>
+                    <div className="border-b-2 px-3 border-text">{totalPages}</div>
                     <p className="mx-5">Show on page</p>
                 </div>
                 <div className="inline-flex w-1/3 justify-center items-center">
-                    <p>Page</p>
-                    <div className="px-3 p-2 bg-white mx-20">10</div>
+                    <button
+                        onClick={goToPreviousPage}
+                        disabled={currentPage === 1}>
+                        <FontAwesomeIcon icon={faChevronLeft} className="self-center text-text ">
+                        </FontAwesomeIcon>
+                    </button>
+                    <div className="px-3 p-2 bg-white mx-10">{currentPage}</div>
+                    <button
+                        onClick={goToNextPage}
+                        disabled={currentPage === totalPages}>
+                        <FontAwesomeIcon icon={faChevronRight} className="self-center text-text">
+                        </FontAwesomeIcon>
+                    </button>
                 </div>
                 <div className="w-1/3"></div>
             </div>
-            <Modal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onAddCustomer={handleAddCustomer}
-            ></Modal>
+
+            <Modal isOpen={isModalOpen} onClose={closeModal} onAddCustomer={handleAddCustomer}>
+            </Modal>
         </div>
     );
-};
-
-export default CustomersList;
+}
