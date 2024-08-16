@@ -34,8 +34,6 @@ const LoginPage = () => {
         }),
     });
 
-    //* resetForm: Reset về init values, xóa error
-    //* Thêm resetForm vào dependencies để cho chắc chắn, cơ bản thì bỏ cũng đc
     const FormReset = ({ setPurpose }) => {
         const { resetForm } = useFormikContext();
         useEffect(() => {

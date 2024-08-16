@@ -6,7 +6,7 @@ import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
 
 const LoginPage = () => {
-    const [purpose, setPurpose] = useState("login");
+    const [purpose, setPurpose] = useState("register");
 
     const registerFields =
         purpose == "register" ? ["email", "name", "phone", "address"] : [];
@@ -34,13 +34,11 @@ const LoginPage = () => {
         }),
     });
 
-    //* resetForm: Reset về init values, xóa error
-    //* Thêm resetForm vào dependencies để cho chắc chắn, cơ bản thì bỏ cũng đc
     const FormReset = ({ setPurpose }) => {
         const { resetForm } = useFormikContext();
         useEffect(() => {
             resetForm();
-        }, [setPurpose, resetForm]);
+        }, [setPurpose]);
         return null;
     };
     return (

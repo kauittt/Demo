@@ -1,12 +1,12 @@
 import React from "react";
-import { Form, Formik, useFormikContext } from "formik";
-import { useEffect, useState } from "preact/hooks";
+import { Form, Formik } from "formik";
+import { useState } from "preact/hooks";
 import * as Yup from "yup";
 import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
 
 const LoginPage = () => {
-    const [purpose, setPurpose] = useState("login");
+    const [purpose, setPurpose] = useState("register");
 
     const registerFields =
         purpose == "register" ? ["email", "name", "phone", "address"] : [];
@@ -33,16 +33,6 @@ const LoginPage = () => {
             address: Yup.string().required("Address is required"),
         }),
     });
-
-    //* resetForm: Reset về init values, xóa error
-    //* Thêm resetForm vào dependencies để cho chắc chắn, cơ bản thì bỏ cũng đc
-    const FormReset = ({ setPurpose }) => {
-        const { resetForm } = useFormikContext();
-        useEffect(() => {
-            resetForm();
-        }, [setPurpose, resetForm]);
-        return null;
-    };
     return (
         <div className="flex w-full h-screen">
             {/*//* Image */}
@@ -78,7 +68,6 @@ const LoginPage = () => {
             >
                 {({ isSubmitting }) => (
                     <Form className="flex flex-center flex-col flex-1 gap-[40px]">
-                        <FormReset setPurpose={purpose} />
                         <div className={`grid gap-[20px] ${gridCol}`}>
                             {fields?.map((field, index) => {
                                 let inputType = "text";

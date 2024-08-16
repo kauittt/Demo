@@ -7,8 +7,8 @@ export default {
             text: "#3A3A49", //* Màu chữ
             white: "#FFF", //* Trắng
             bgr: "#F5F5F5", //* Background
-            border: "#EBEFF2", //* Customer Item's Border
-            grey: "#C2C2C2", //* Input border
+            border: "#EBEFF2",
+            grey: "lightgrey",
             black: "#000",
             red: "#FD4848", //* Error, Avatar
         },

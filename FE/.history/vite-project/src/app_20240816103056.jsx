@@ -7,7 +7,7 @@ export function App() {
     // 1920 - 1024
     // 0.8 - 0.7
     return (
-        <div className="flex flex-center ">
+        <div className="flex flex-center mt-[50px]">
             <LoginPage></LoginPage>
         </div>
     );
