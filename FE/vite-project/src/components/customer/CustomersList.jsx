@@ -9,7 +9,7 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/ModalCustomer";
-import { get, post } from "../../utils/httpRequest";
+import { del, get, post } from "../../utils/httpRequest";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +36,7 @@ export default function CustomersList() {
     const closeModal = () => setIsModalOpen(false);
 
     async function fetchData() {
-        let responseCustomer = await get("/customers/all_customer");
+        let responseCustomer = await get("/customers");
         setCustomerList(responseCustomer);
     }
 
@@ -72,7 +72,7 @@ export default function CustomersList() {
 
     const handleAddCustomer = async (newCustomer) => {
         try {
-            const res = await post("/customers/add_customer", newCustomer);
+            const res = await post("/customers", newCustomer);
             setCustomerList([...customerList, res]);
             closeModal();
         } catch (error) {
@@ -83,13 +83,14 @@ export default function CustomersList() {
 
     const handleDeleteCustomer = async (customer) => {
         try {
-            const res = await post("/customers/delete_customer", customer);
+            const res = await del(`/customers/${customer.id}`);  // Truyền ID qua URL
             setCustomerList(customerList.filter((c) => c.id !== customer.id));
+            setAction("-1")
         } catch (error) {
             console.error(error);
             alert(
                 "Failed to delete customer: " +
-                    (error.response?.data?.message || error.message)
+                (error.response?.data?.message || error.message)
             );
         }
     };
@@ -109,33 +110,33 @@ export default function CustomersList() {
     };
 
     return (
-        <div className="w-screen h-screen bg-main">
+        <div className="w-screen h-screen bg-bgr">
             <div className="flex justify-end">
                 <div className="w-[220px] m-10 mx-20 h-[77px] flex rounded-3xl bg-white shadow-lg">
                     <div className="w-[182px] h-[45px] justify-center flex m-auto gap-2">
                         <img className="h-[45px] w-[45px]" alt=""></img>
-                        <p className="text-base self-center text-text">
+                        <p className="text-base self-center text-main">
                             Carter Smith
                         </p>
                         <FontAwesomeIcon
                             icon={faChevronDown}
-                            className="self-center text-text"
+                            className="self-center text-main"
                         ></FontAwesomeIcon>
                     </div>
                 </div>
             </div>
             <div className="flex">
                 <div className="inline-flex flex-1 mx-20 items-center justify-center gap-10">
-                    <p className="text-text text-2xl">Customers</p>
-                    <div className="bg-white flex-1 h-[42px] rounded-xl border-text border-2 items-center px-16 gap-10 flex">
+                    <p className="text-main text-2xl">Customers</p>
+                    <div className="bg-white flex-1 h-[42px] rounded-xl border-main border-2 items-center px-16 gap-10 flex">
                         <FontAwesomeIcon
                             icon={faSearch}
-                            className="self-center text-text"
+                            className="self-center text-main"
                         ></FontAwesomeIcon>
                         <input
                             type="text"
                             placeholder="Search customers..."
-                            className="placeholder-text flex-1"
+                            className="placeholder-main flex-1"
                             onChange={(event) => {
                                 const newValue = event.target.value;
                                 setKeyword(newValue);
@@ -144,7 +145,7 @@ export default function CustomersList() {
                         />
                     </div>
                     <button
-                        className="inline-flex px-4 h-[42px] items-center gap-4 bg-text rounded-xl"
+                        className="inline-flex px-4 h-[42px] items-center gap-4 bg-main rounded-xl"
                         onClick={openModal}
                     >
                         <FontAwesomeIcon
@@ -156,7 +157,7 @@ export default function CustomersList() {
                 </div>
             </div>
             <div className="flex min-w-full">
-                <table className="border-collapse border-spacing-4 divide-y spa divide-solid bg-white rounded-xl shadow-xl border-text flex-1 m-20 p-2">
+                <table className="border-collapse border-spacing-4 divide-y spa divide-solid bg-white rounded-xl shadow-xl border-main flex-1 m-20 p-2">
                     <thead>
                         <tr>
                             <th className="p-3">No</th>
@@ -181,17 +182,17 @@ export default function CustomersList() {
                                     <button onClick={() => setAction(index)}>
                                         <FontAwesomeIcon
                                             icon={faChevronDown}
-                                            className="self-center text-text"
+                                            className="self-center text-main"
                                         />
                                     </button>
                                     {action === index && (
                                         <div
                                             ref={dropdownRef}
-                                            className="absolute block border-2 rounded-xl ml-7 mt-1 bg-white border-text"
+                                            className="absolute block border-2 rounded-xl ml-7 mt-1 bg-white border-main"
                                         >
                                             <ul>
                                                 <li>
-                                                    <button className="hover:bg-main w-[70px] p-2 rounded-xl">
+                                                    <button className="hover:bg-bgr w-[70px] p-2 rounded-xl">
                                                         Edit
                                                     </button>
                                                 </li>
@@ -202,7 +203,7 @@ export default function CustomersList() {
                                                                 item
                                                             )
                                                         }
-                                                        className="hover:bg-main w-[70px] p-2 rounded-xl"
+                                                        className="hover:bg-bgr w-[70px] p-2 rounded-xl"
                                                     >
                                                         Delete
                                                     </button>
@@ -223,11 +224,11 @@ export default function CustomersList() {
                         <div className=" rounded-lg px-3 p-2 shadow-xl bg-white">
                             <FontAwesomeIcon
                                 icon={faCog}
-                                className="self-center text-text"
+                                className="self-center text-main"
                             ></FontAwesomeIcon>
                         </div>
                     </div>
-                    <div className="border-b-2 px-3 border-text">
+                    <div className="border-b-2 px-3 border-main">
                         {totalPages}
                     </div>
                     <p className="mx-5">Show on page</p>
@@ -239,7 +240,7 @@ export default function CustomersList() {
                     >
                         <FontAwesomeIcon
                             icon={faChevronLeft}
-                            className="self-center text-text "
+                            className="self-center text-main "
                         ></FontAwesomeIcon>
                     </button>
                     <div className="px-3 p-2 bg-white mx-10">{currentPage}</div>
@@ -249,7 +250,7 @@ export default function CustomersList() {
                     >
                         <FontAwesomeIcon
                             icon={faChevronRight}
-                            className="self-center text-text"
+                            className="self-center text-main"
                         ></FontAwesomeIcon>
                     </button>
                 </div>

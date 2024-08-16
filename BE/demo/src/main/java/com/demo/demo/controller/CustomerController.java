@@ -25,7 +25,7 @@ public class CustomerController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/all_customer")
+    @GetMapping(value = "")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         List<Customer> customers = customerService.findAll();
         List<CustomerDTO> customerDTOs = customers.stream()
@@ -34,7 +34,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerDTOs);
     }
 
-    @PostMapping(value = "/add_customer")
+    @PostMapping(value = "")
     public ResponseEntity<?> addCustomer(@RequestBody CustomerDTO customer) {
         try {
             return ResponseEntity.ok(customerService.add(customer));
@@ -44,9 +44,9 @@ public class CustomerController {
         }
     }
 
-    @PostMapping(value = "/delete_customer")
-    public ResponseEntity<String> deleteCustomer(@RequestBody Customer customer) {
-        boolean isDeleted = customerService.delete(customer);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable String id) {
+        boolean isDeleted = customerService.delete(id);
         if (isDeleted) {
             return ResponseEntity.ok("Customer deleted successfully");
         } else {

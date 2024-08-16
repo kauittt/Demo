@@ -57,9 +57,10 @@ public class CustomerService {
     public Customer update(Customer customer) {
         return customerRepository.save(customer);
     }
-    public boolean delete(Customer customer) {
-        if (customerRepository.existsById(customer.getId())) {
-            customerRepository.deleteById(customer.getId());
+
+    public boolean delete(String customerId) {
+        if (customerRepository.existsById(customerId)) {
+            customerRepository.deleteById(customerId);
             return true;
         }
         return false;
