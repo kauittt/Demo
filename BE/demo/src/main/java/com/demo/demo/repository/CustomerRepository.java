@@ -15,6 +15,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Query("SELECT MAX(c.id) FROM Customer c")
     Optional<String> findMaxId();
 
-    @Query("SELECT c FROM Customer c WHERE c.id LIKE %:keyword% OR c.name LIKE %:keyword% OR c.phone like %:keyword% or c.user.name like %:keyword% ")
+    @Query("SELECT c FROM Customer c WHERE lower(c.id)LIKE %:keyword% OR lower(c.name) LIKE %:keyword% ")
     List<Customer> findByIdOrNameContaining(@Param("keyword") String keyword);
 }

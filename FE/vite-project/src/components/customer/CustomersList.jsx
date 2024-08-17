@@ -9,7 +9,7 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/ModalCustomer";
-import { del, get, post } from "../../utils/httpRequest";
+import { del, get, post, put } from "../../utils/httpRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./../../elements/Button";
@@ -39,9 +39,10 @@ export default function CustomersList() {
     const [customerList, setCustomerList] = useState([]);
     const [action, setAction] = useState("-1");
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(10);
+    const [itemsPerPage] = useState(6);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [keyword, setKeyword] = useState("");
+    const [updateCustomer, setUpdateCustomer] = useState(undefined);
 
     const dropdownRef = useRef(null);
 
@@ -90,14 +91,30 @@ export default function CustomersList() {
         searchCustomer();
     }, [keyword]);
 
-    const handleAddCustomer = async (newCustomer) => {
-        try {
-            const res = await post("/customers", newCustomer);
-            setCustomerList([...customerList, res]);
-            closeModal();
-        } catch (error) {
-            console.log(error);
-            alert("Id has exist: " + error);
+    const handleSaveCustomer = async (customer) => {
+        customer.contact = {
+            id: customer.contact,
+            name: ""
+        }
+        if (!updateCustomer) {
+            try {
+                const res = await post("/customers", customer);
+                fetchData()
+                closeModal();
+            } catch (error) {
+                console.log(error);
+                alert("Id already exist: " + error);
+            }
+        }
+        else {
+            try {
+                const res = await put("/customers", customer);
+                fetchData();
+                closeModal();
+            } catch (error) {
+                console.log(error);
+                alert("Id already exist: " + error);
+            }
         }
     };
 
@@ -110,7 +127,7 @@ export default function CustomersList() {
             console.error(error);
             alert(
                 "Failed to delete customer: " +
-                    (error.response?.data?.message || error.message)
+                (error.response?.data?.message || error.message)
             );
         }
     };
@@ -124,6 +141,7 @@ export default function CustomersList() {
     const goToNextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, totalPages));
     };
+    
 
     const goToPreviousPage = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -212,98 +230,61 @@ export default function CustomersList() {
                             value={keyword}
                         />
                     </label>
-                    {/* <div
-                        className="flex-1 flex flex-center 
-                    bg-white border-main border-2 h-[42px] rounded-xl  px-16 gap-10 "
-                    ></div> */}
-
-                    {/* <button
-                        className="inline-flex px-4 h-[42px] items-center gap-4 bg-main rounded-xl"
-                        onClick={openModal}
-                    >
-                        <FontAwesomeIcon
-                            icon={faPlus}
-                            className="self-center text-white"
-                        ></FontAwesomeIcon>
-                        <p className="text-white">New Customer</p>
-                    </button> */}
-                    {/*//* Button  */}
                     <Button
                         name="New Customer"
-                        onClick={openModal}
+                        onClick={() => {
+                            setUpdateCustomer(undefined)
+                            openModal()
+                        }}
                         width="150px"
                     ></Button>
-                    {/* </div> */}
                 </div>
 
                 {/*//* Table  */}
                 <div className="flex max-h-[389px] overflow-y-scroll shadow-custom rounded-xl mt-[20px]">
-                    <table className="rounded-xl shadow-custom flex-1 bg-white">
-                        <thead className="">
+                    <table className="rounded-xl shadow-custom flex-1 bg-white table-fixed w-full" style={{ tableLayout: "fixed" }}>
+                        <thead>
                             <tr>
-                                <th className="p-3">No</th>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Contact</th>
-                                <th>Price</th>
-                                <th>Actions</th>
+                                <th className="p-3 w-[10%]">No</th>
+                                <th className="w-[30%]">Name</th>
+                                <th className="w-[20%]">Phone</th>
+                                <th className="w-[20%]">Contact</th>
+                                <th className="w-[20%]">Price</th>
+                                <th className="w-32">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentItems.map((item, index) => (
                                 <tr
                                     key={index}
-                                    className="border-t-[1px] cursor-pointer 
-                                    border-border  hover:bg-hover
-                                    transition-base"
+                                    className="border-t-[1px] cursor-pointer border-border hover:bg-hover transition-base"
                                 >
-                                    <td className="text-center p-3">
-                                        {item.id}
-                                    </td>
-                                    <td className="text-center">{item.name}</td>
+                                    <td className="text-center break-words">{item.id}</td>
+                                    <td className="text-center break-words">{item.name}</td>
+                                    <td className="text-center break-words">{item.phone}</td>
+                                    <td className="text-center break-words" >{item.contact.name || ""}</td>
+                                    <td className="text-center break-words">{item.price}</td>
                                     <td className="text-center">
-                                        {item.phone}
-                                    </td>
-                                    <td className="text-center">
-                                        {item.contact ? item.contact : ""}
-                                    </td>
-                                    <td className="text-center">
-                                        {item.price}
-                                    </td>
-                                    <td className="text-center w-32">
-                                        <button
-                                            className="p-[15px]"
-                                            onClick={() => setAction(index)}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faChevronDown}
-                                                className="self-center text-main"
-                                            />
+                                        <button className="py-[15px]" onClick={() => setAction(index)}>
+                                            <FontAwesomeIcon icon={faChevronDown} className="self-center text-main" />
                                         </button>
                                         {action === index && (
                                             <div
                                                 ref={dropdownRef}
-                                                className="absolute block 
-                                                bg-white rounded-xl font-semibold
-                                                border-2  ml-7 mt-1  border-main"
+                                                className="absolute block bg-white rounded-xl font-semibold border-2 ml-7 mt-1 border-main"
                                             >
                                                 <ul>
                                                     <li>
-                                                        <button className="hover:bg-hover w-[70px] p-2 rounded-xl">
-                                                            Edit
-                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                console.log(item)
+                                                                setUpdateCustomer(item)
+                                                                openModal()
+                                                            }}
+                                                            className="hover:bg-hover w-[70px] p-2 rounded-xl">Edit</button>
                                                     </li>
                                                     <li>
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDeleteCustomer(
-                                                                    item
-                                                                )
-                                                            }
-                                                            className="hover:bg-hover w-[70px] p-2 rounded-xl"
-                                                        >
-                                                            Delete
-                                                        </button>
+                                                        <button onClick={() => handleDeleteCustomer(item)} className="hover:bg-hover w-[70px] p-2 rounded-xl">Delete</button>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -315,24 +296,18 @@ export default function CustomersList() {
                     </table>
                 </div>
 
+
                 {/*//* Footer  */}
-                <div className="flex flex-center">
-                    {/* <div className="inline-flex items-center w-1/3 ">
-                        <div className="ml-20 mr-10">
-                            <div className=" rounded-lg px-3 p-2 shadow-xl bg-white">
-                                <FontAwesomeIcon
-                                    icon={faCog}
-                                    className="self-center text-main"
-                                ></FontAwesomeIcon>
-                            </div>
+                <div className="justify-between inline-flex">
+                    <div className="inline-flex items-center w-1/3 ">
+                        <div className="m-8">
                         </div>
                         <div className="border-b-2 px-3 border-main">
                             {totalPages}
                         </div>
                         <p className="mx-5">Show on page</p>
-                    </div> */}
-
-                    <div className="flex flex-center">
+                    </div>
+                    <div className="flex flex-center w-1/3">
                         <button
                             onClick={goToPreviousPage}
                             disabled={currentPage === 1}
@@ -342,9 +317,15 @@ export default function CustomersList() {
                                 className="self-center text-main "
                             ></FontAwesomeIcon>
                         </button>
-                        <div className="px-3 p-2 bg-white mx-10">
-                            {currentPage}
-                        </div>
+                        <button className="p-2 mx-1 text-xs">
+                            {currentPage == 1 ? <p className="text-bgr">1</p> : (currentPage - 1)}
+                        </button>
+                            <div className="p-2 mx-3 bg-white">
+                                {currentPage}
+                            </div>
+                        <button className="p-2 mx-1 text-xs">
+                            {currentPage == totalPages ? <p className="text-bgr">1</p> : (currentPage + 1)}
+                        </button>
                         <button
                             onClick={goToNextPage}
                             disabled={currentPage === totalPages}
@@ -355,12 +336,15 @@ export default function CustomersList() {
                             ></FontAwesomeIcon>
                         </button>
                     </div>
+                    <div className="w-1/3 ">
+                    </div>
                 </div>
 
                 <Modal
                     isOpen={isModalOpen}
                     onClose={closeModal}
-                    onAddCustomer={handleAddCustomer}
+                    onSaveCustomer={handleSaveCustomer}
+                    customer={updateCustomer}
                 ></Modal>
             </div>
         </div>
