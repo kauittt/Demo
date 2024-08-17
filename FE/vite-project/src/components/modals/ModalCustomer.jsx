@@ -8,7 +8,7 @@ import FormInput from "./../../elements/FormInput";
 import Button from "./../../elements/Button";
 import { useSelector } from "react-redux";
 
-export default function ModalCustomer({ isOpen, onClose, onAddCustomer }) {
+export default function ModalCustomer({ isOpen, onClose, onSaveCustomer, customer }) {
     const [contacts, setContacts] = useState([]);
     const registerFields = [];
     const fields = [
@@ -23,7 +23,6 @@ export default function ModalCustomer({ isOpen, onClose, onAddCustomer }) {
     const user = useSelector((state) => state.user);
     async function fetchData() {
         let responseContact = await get("customers/all_contact");
-        // console.log(responseContact)
         setContacts(responseContact);
     }
 
@@ -44,11 +43,11 @@ export default function ModalCustomer({ isOpen, onClose, onAddCustomer }) {
                 <h1 className="text-4xl m-3 text-left">Add Customer</h1>
                 <Formik
                     initialValues={{
-                        id: "",
-                        name: "",
-                        phone: "",
-                        contact: user.user.id,
-                        price: "",
+                        id:customer?customer.id: "",
+                        name:customer?customer.name:  "",
+                        phone:customer?customer.phone:  "",
+                        contact:customer?customer.contact.id: user.user.id,
+                        price:customer?customer.price: "",
                     }}
                     validationSchema={Yup.object({
                         id: Yup.string().matches(
@@ -73,7 +72,7 @@ export default function ModalCustomer({ isOpen, onClose, onAddCustomer }) {
                     })}
                     onSubmit={(values, { setSubmitting }) => {
                         setTimeout(() => {
-                            onAddCustomer(values);
+                            onSaveCustomer(values);
                             setSubmitting(false);
                         }, 400);
                     }}
@@ -82,10 +81,8 @@ export default function ModalCustomer({ isOpen, onClose, onAddCustomer }) {
                         <Form>
                             {fields?.map((field, index) => {
                                 let inputType = "text";
-                                if (field === "password") {
-                                    inputType = "password";
-                                } else if (field === "email") {
-                                    inputType = "email";
+                                if (field === "price") {
+                                    inputType = "numer";
                                 } else if (field === "contact") {
                                     inputType = "select";
                                 }
@@ -101,6 +98,7 @@ export default function ModalCustomer({ isOpen, onClose, onAddCustomer }) {
                                                 ? "select"
                                                 : undefined
                                         }
+                                        disabled={field === "id" && customer}
                                         placeholder={`Enter your ${field}`}
                                     >
                                         {field === "contact" && (

@@ -7,6 +7,7 @@ import com.demo.demo.entity.User;
 import com.demo.demo.repository.CustomerRepository;
 import com.demo.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,11 +28,19 @@ public class CustomerService {
     }
 
     public List<Customer> findAll() {
-        return  customerRepository.findAll();
+        return customerRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public List<Customer> findByIdOrName(String keyword) {
-        return customerRepository.findByIdOrNameContaining(keyword);
+        String lowerCaseKeyword = keyword.toLowerCase();
+        StringBuilder modifiedKeyword = new StringBuilder();
+        for (int i = 0; i < keyword.length(); i++) {
+            modifiedKeyword.append(lowerCaseKeyword.charAt(i));
+            if (i < keyword.length() - 1) {
+                modifiedKeyword.append('%');
+            }
+        }
+        return customerRepository.findByIdOrNameContaining(modifiedKeyword.toString());
     }
 
     public CustomerDTO add(CustomerDTO customerDTO) {
@@ -45,17 +54,30 @@ public class CustomerService {
         }
 
         Customer customer = new Customer(customerDTO.getId(), customerDTO.getName(), customerDTO.getPhone(), customerDTO.getPrice(),
-                userRepository.findById(customerDTO.getContact()).orElseThrow(() ->
+                userRepository.findById(customerDTO.getContact().getId()).orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"))
         );
 
         Customer savedCustomer = customerRepository.save(customer);
 
-        return new CustomerDTO(savedCustomer.getId(),savedCustomer.getName(), savedCustomer.getPhone(),savedCustomer.getPrice(), savedCustomer.getUser().getName()
+        return new CustomerDTO(savedCustomer.getId(),savedCustomer.getName(), savedCustomer.getPhone(),savedCustomer.getPrice(), new ContactDTO(savedCustomer.getUser().getId(),savedCustomer.getUser().getName())
         );
     }
-    public Customer update(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDTO update(CustomerDTO customerDTO) {
+        if (customerRepository.findById(customerDTO.getId()).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "ID not found: " + customerDTO.getId());
+        }
+
+
+        Customer customer = new Customer(customerDTO.getId(), customerDTO.getName(), customerDTO.getPhone(), customerDTO.getPrice(),
+                userRepository.findById(customerDTO.getContact().getId()).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"))
+        );
+
+        Customer savedCustomer = customerRepository.save(customer);
+
+        return new CustomerDTO(savedCustomer.getId(),savedCustomer.getName(), savedCustomer.getPhone(),savedCustomer.getPrice(), new ContactDTO(savedCustomer.getId(),savedCustomer.getUser().getName())
+        );
     }
 
     public boolean delete(String customerId) {

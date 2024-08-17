@@ -29,7 +29,7 @@ public class CustomerController {
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         List<Customer> customers = customerService.findAll();
         List<CustomerDTO> customerDTOs = customers.stream()
-                .map(customer -> new CustomerDTO(customer.getId(), customer.getName(),customer.getPhone(),customer.getPrice(),customer.getUser().getName()))
+                .map(customer -> new CustomerDTO(customer.getId(), customer.getName(),customer.getPhone(),customer.getPrice(),new ContactDTO(customer.getUser().getId(),customer.getUser().getName())))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(customerDTOs);
     }
@@ -38,6 +38,16 @@ public class CustomerController {
     public ResponseEntity<?> addCustomer(@RequestBody CustomerDTO customer) {
         try {
             return ResponseEntity.ok(customerService.add(customer));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "")
+    public ResponseEntity<?> updateCustomer(@RequestBody CustomerDTO customer) {
+        try {
+            return ResponseEntity.ok(customerService.update(customer));
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -62,7 +72,7 @@ public class CustomerController {
     public ResponseEntity<List<CustomerDTO>> searchCustomer(@RequestParam String keyword) {
         List<Customer> customers = customerService.findByIdOrName(keyword);
         List<CustomerDTO> customerDTOs = customers.stream()
-                .map(customer -> new CustomerDTO(customer.getId(), customer.getName(),customer.getPhone(),customer.getPrice(),customer.getUser().getName()))
+                .map(customer -> new CustomerDTO(customer.getId(), customer.getName(),customer.getPhone(),customer.getPrice(),new ContactDTO(customer.getUser().getId(),customer.getUser().getName())))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(customerDTOs);
     }
