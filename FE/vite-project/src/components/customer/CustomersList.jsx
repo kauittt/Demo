@@ -93,17 +93,14 @@ export default function CustomersList() {
 
     const handleSaveCustomer = async (customer) => {
         // Tạo một deep copy của customer
-        // const originalCustomer = JSON.parse(JSON.stringify(customer));
-        // console.log("handleSaveCustomer");
-        // console.log(customer);
-        customer.contact = {
+        let tempCustomer = {...customer}
+        tempCustomer.contact = {
             id: customer.contact,
             name: "",
         };
-        // console.log(originalCustomer);
         if (!updateCustomer) {
             try {
-                const res = await post("/customers", customer);
+                const res = await post("/customers", tempCustomer);
                 fetchData();
                 toast.info("Add successfully", {
                     position: "top-right",
@@ -117,7 +114,7 @@ export default function CustomersList() {
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
+                // customer.contact = ;
                 toast.error("ID already existed", {
                     position: "top-right",
                     autoClose: 5000,
@@ -130,7 +127,7 @@ export default function CustomersList() {
             }
         } else {
             try {
-                const res = await put("/customers", customer);
+                const res = await put("/customers", tempCustomer);
                 fetchData();
                 toast.info("Update successfully", {
                     position: "top-right",
@@ -281,9 +278,9 @@ export default function CustomersList() {
                 </div>
 
                 {/*//* Table  */}
-                <div className="flex max-h-[389px] min-h-[389px] shadow-custom rounded-xl mt-[20px]">
+                <div className="flex max-h-[389px] min-h-[389px]  rounded-xl mt-[20px]">
                     <table
-                        className="rounded-xl shadow-custom flex-1 bg-white table-fixed w-full"
+                        className="rounded-xl shadow-custom h-1 bg-white table-fixed w-full"
                         style={{ tableLayout: "fixed" }}
                     >
                         <thead>
@@ -300,25 +297,24 @@ export default function CustomersList() {
                             {currentItems.map((item, index) => (
                                 <tr
                                     key={index}
-                                    className="h-[57px]
-                                    border-t-[1px] cursor-pointer border-border hover:bg-hover transition-base"
+                                    className="border-t-[1px] cursor-pointer border-border text-center break-words hover:bg-hover transition-base"
                                 >
-                                    <td className="text-center break-words p-3">
+                                    <td >
                                         {item.id}
                                     </td>
-                                    <td className="text-center break-words">
+                                    <td >
                                         {item.name}
                                     </td>
-                                    <td className="text-center break-words">
+                                    <td >
                                         {item.phone}
                                     </td>
-                                    <td className="text-center break-words">
+                                    <td >
                                         {item.contact.name || ""}
                                     </td>
-                                    <td className="text-center break-words">
+                                    <td>
                                         {item.price}
                                     </td>
-                                    <td className="text-center">
+                                    <td >
                                         <button
                                             className="py-[15px] px-[20px]"
                                             onClick={() => setAction(index)}

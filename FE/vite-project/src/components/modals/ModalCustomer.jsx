@@ -52,9 +52,9 @@ export default function ModalCustomer({
                     initialValues={{
                         id: customer ? customer.id : "",
                         name: customer ? customer.name : "",
-                        phone: customer ? customer.phone : "0324561234",
-                        contact: customer ? customer.contact.id : user.user.id,
-                        price: customer ? customer.price : "123",
+                        phone: customer ? customer.phone : "",
+                        contact: customer && customer.contact ? customer.contact.id : user.user.id,
+                        price: customer ? customer.price : "",
                     }}
                     validationSchema={Yup.object({
                         id: Yup.string().matches(
