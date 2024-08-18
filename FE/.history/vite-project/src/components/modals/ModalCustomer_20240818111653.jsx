@@ -38,11 +38,9 @@ export default function ModalCustomer({
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-5 rounded relative w-[550px] ">
+            <div className="bg-white p-5 rounded relative w-[550px]">
                 <button
-                    className="text-3xl
-                    absolute top-[25px] right-[20px] border-none bg-transparent cursor-pointer-close
-                     py-[10px] px-[18px] hover:text-red"
+                    className="absolute top-2.5 right-5 border-none bg-transparent text-2xl cursor-pointer-close"
                     onClick={onClose}
                 >
                     &times;
@@ -52,14 +50,14 @@ export default function ModalCustomer({
                     initialValues={{
                         id: customer ? customer.id : "",
                         name: customer ? customer.name : "",
-                        phone: customer ? customer.phone : "0324561234",
+                        phone: customer ? customer.phone : "",
                         contact: customer ? customer.contact.id : user.user.id,
-                        price: customer ? customer.price : "123",
+                        price: customer ? customer.price : "",
                     }}
                     validationSchema={Yup.object({
                         id: Yup.string().matches(
-                            /^cus\d{4}$/,
-                            "ID must start with 'cus' followed by 4 digits"
+                            /^cus\d{3}$/,
+                            "ID must start with 'cus' followed by 3 digits"
                         ),
                         name: Yup.string()
                             .required("Name is required.")
@@ -85,7 +83,7 @@ export default function ModalCustomer({
                     }}
                 >
                     {(formik) => (
-                        <Form className="grid grid-cols-2 gap-[20px] justify-between">
+                        <Form>
                             {fields?.map((field, index) => {
                                 let inputType = "text";
                                 if (field === "price") {
@@ -122,16 +120,16 @@ export default function ModalCustomer({
                                     </FormInput>
                                 );
                             })}
-                            <div className="flex gap-[10px] justify-end items-center">
+                            <div className="flex gap-[10px] justify-end">
                                 <Button
-                                    // width="min-w-[85px] w-[85px]"
+                                    width="85px"
                                     name="Cancel"
                                     onClick={onClose}
                                     disabled={formik.isSubmitting}
                                 ></Button>
 
                                 <Button
-                                    // width="85px"
+                                    width="85px"
                                     name={"Save"}
                                     type="submit"
                                 />

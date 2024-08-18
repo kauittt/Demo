@@ -52,14 +52,16 @@ export default function ModalCustomer({
                     initialValues={{
                         id: customer ? customer.id : "",
                         name: customer ? customer.name : "",
-                        phone: customer ? customer.phone : "0324561234",
+                        phone: customer ? customer.phone : "",
                         contact: customer ? customer.contact.id : user.user.id,
-                        price: customer ? customer.price : "123",
+                        price: customer ? customer.price : "",
                     }}
                     validationSchema={Yup.object({
                         id: Yup.string().matches(
-                            /^cus\d{4}$/,
-                            "ID must start with 'cus' followed by 4 digits"
+                            // /^cus\d{4}$/,
+                            // "ID must start with 'cus' followed by 4 digits"
+                            /\d{4}$/,
+                            "ID max by 4 digits"
                         ),
                         name: Yup.string()
                             .required("Name is required.")
