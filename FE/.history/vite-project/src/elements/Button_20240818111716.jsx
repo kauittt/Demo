@@ -4,7 +4,7 @@ const Button = ({
     name = "Button",
     type = "button",
     disabled = false,
-    width = "min-w-[100px] w-[100px]",
+    width = "100px",
     ...props
 }) => {
     // border border-text-color
@@ -13,7 +13,7 @@ const Button = ({
         <button
             type={type}
             disabled={disabled}
-            className={`${width} m-h-[40px] h-[40px] leading-[40px] p-[10px]
+            className={`m-w-[${width}] w-[${width}] m-h-[40px] h-[40px] leading-[40px] p-[10px]
             rounded text-lg font-semibold 
             flex items-center justify-center
             cursor-pointer shadow-custom

@@ -92,60 +92,27 @@ export default function CustomersList() {
     }, [keyword]);
 
     const handleSaveCustomer = async (customer) => {
-        // Tạo một deep copy của customer
-        // const originalCustomer = JSON.parse(JSON.stringify(customer));
-        // console.log("handleSaveCustomer");
-        // console.log(customer);
         customer.contact = {
             id: customer.contact,
             name: "",
         };
-        // console.log(originalCustomer);
         if (!updateCustomer) {
             try {
                 const res = await post("/customers", customer);
                 fetchData();
-                toast.info("Add successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
-                toast.error("ID already existed", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                alert("Id already exist: " + error);
             }
         } else {
             try {
                 const res = await put("/customers", customer);
                 fetchData();
-                toast.info("Update successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
-                alert("Error: " + error);
+                alert("Id already exist: " + error);
             }
         }
     };
@@ -155,15 +122,6 @@ export default function CustomersList() {
             const res = await del(`/customers/${customer.id}`); // Truyền ID qua URL
             setCustomerList(customerList.filter((c) => c.id !== customer.id));
             setAction("-1");
-            toast.info("Delete successfully", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
         } catch (error) {
             console.error(error);
             alert(
@@ -281,7 +239,7 @@ export default function CustomersList() {
                 </div>
 
                 {/*//* Table  */}
-                <div className="flex max-h-[389px] min-h-[389px] shadow-custom rounded-xl mt-[20px]">
+                <div className="flex max-h-[389px] overflow-y-scroll shadow-custom rounded-xl mt-[20px]">
                     <table
                         className="rounded-xl shadow-custom flex-1 bg-white table-fixed w-full"
                         style={{ tableLayout: "fixed" }}
@@ -300,10 +258,9 @@ export default function CustomersList() {
                             {currentItems.map((item, index) => (
                                 <tr
                                     key={index}
-                                    className="h-[57px]
-                                    border-t-[1px] cursor-pointer border-border hover:bg-hover transition-base"
+                                    className="border-t-[1px] cursor-pointer border-border hover:bg-hover transition-base"
                                 >
-                                    <td className="text-center break-words p-3">
+                                    <td className="text-center break-words">
                                         {item.id}
                                     </td>
                                     <td className="text-center break-words">
@@ -320,7 +277,7 @@ export default function CustomersList() {
                                     </td>
                                     <td className="text-center">
                                         <button
-                                            className="py-[15px] px-[20px]"
+                                            className="py-[15px]"
                                             onClick={() => setAction(index)}
                                         >
                                             <FontAwesomeIcon
@@ -379,7 +336,7 @@ export default function CustomersList() {
                         <div className="border-b-2 px-3 border-main">
                             {totalPages}
                         </div>
-                        <p className="mx-5 cursor-">Show on page</p>
+                        <p className="mx-5 cursor-auto">Show on page</p>
                     </div>
                     <div className="flex flex-center w-1/3">
                         <button
@@ -391,17 +348,15 @@ export default function CustomersList() {
                                 className="self-center text-main "
                             ></FontAwesomeIcon>
                         </button>
-                        <button className="p-2 mx-1 text-xs font-semibold">
+                        <button className="p-2 mx-1 text-xs">
                             {currentPage == 1 ? (
                                 <p className="text-bgr">1</p>
                             ) : (
                                 currentPage - 1
                             )}
                         </button>
-                        <div className="p-2 mx-3 bg-white font-semibold text-main">
-                            {currentPage}
-                        </div>
-                        <button className="p-2 mx-1 text-xs font-semibold">
+                        <div className="p-2 mx-3 bg-white">{currentPage}</div>
+                        <button className="p-2 mx-1 text-xs">
                             {currentPage == totalPages ? (
                                 <p className="text-bgr">1</p>
                             ) : (

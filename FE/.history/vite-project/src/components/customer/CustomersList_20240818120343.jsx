@@ -92,15 +92,12 @@ export default function CustomersList() {
     }, [keyword]);
 
     const handleSaveCustomer = async (customer) => {
-        // Tạo một deep copy của customer
-        // const originalCustomer = JSON.parse(JSON.stringify(customer));
-        // console.log("handleSaveCustomer");
-        // console.log(customer);
+        console.log("handleSaveCustomer");
+        console.log(customer);
         customer.contact = {
             id: customer.contact,
             name: "",
         };
-        // console.log(originalCustomer);
         if (!updateCustomer) {
             try {
                 const res = await post("/customers", customer);
@@ -117,16 +114,7 @@ export default function CustomersList() {
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
-                toast.error("ID already existed", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                alert("Id already exist: " + error);
             }
         } else {
             try {
@@ -144,8 +132,7 @@ export default function CustomersList() {
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
-                alert("Error: " + error);
+                alert("Id already exist: " + error);
             }
         }
     };

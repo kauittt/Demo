@@ -92,60 +92,27 @@ export default function CustomersList() {
     }, [keyword]);
 
     const handleSaveCustomer = async (customer) => {
-        // Tạo một deep copy của customer
-        // const originalCustomer = JSON.parse(JSON.stringify(customer));
-        // console.log("handleSaveCustomer");
-        // console.log(customer);
         customer.contact = {
             id: customer.contact,
             name: "",
         };
-        // console.log(originalCustomer);
         if (!updateCustomer) {
             try {
                 const res = await post("/customers", customer);
                 fetchData();
-                toast.info("Add successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
-                toast.error("ID already existed", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                alert("Id already exist: " + error);
             }
         } else {
             try {
                 const res = await put("/customers", customer);
                 fetchData();
-                toast.info("Update successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
                 closeModal();
             } catch (error) {
                 console.log(error);
-                // customer.contact = originalCustomer.contact;
-                alert("Error: " + error);
+                alert("Id already exist: " + error);
             }
         }
     };
@@ -303,7 +270,7 @@ export default function CustomersList() {
                                     className="h-[57px]
                                     border-t-[1px] cursor-pointer border-border hover:bg-hover transition-base"
                                 >
-                                    <td className="text-center break-words p-3">
+                                    <td className="text-center break-words">
                                         {item.id}
                                     </td>
                                     <td className="text-center break-words">
