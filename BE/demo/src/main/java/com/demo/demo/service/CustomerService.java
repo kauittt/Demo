@@ -103,6 +103,6 @@ public class CustomerService {
         int max = maxId.map(id -> Integer.parseInt(id.replace("cus", ""))).orElse(0);
 
         int nextId = max + 1;
-        return String.format("cus%03d", nextId);
+        return String.format("cus%04d", nextId);
     }
 }
