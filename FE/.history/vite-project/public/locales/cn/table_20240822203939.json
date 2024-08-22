@@ -1,0 +1,21 @@
+{
+    "table": {
+        "id": "编号",
+        "name": "姓名",
+        "phone": "电话",
+        "contact": "联系方式",
+        "price": "价格",
+        "actions": "操作"
+    },
+    "desc": {
+        "label": "客户",
+        "button": "新客户",
+        "info": "显示在页面上",
+        "logout": "登出",
+        "placeholder": "搜索客户"
+    },
+    "button": {
+        "edit": "编辑",
+        "delete": "删除"
+    }
+}

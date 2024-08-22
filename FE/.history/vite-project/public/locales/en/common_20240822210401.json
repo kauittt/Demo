@@ -1,0 +1,9 @@
+{
+    "message": "{{type}} successfully",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "add": "Add",
+    "delete": "Delete",
+    "update": "Update"
+}

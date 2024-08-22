@@ -1,0 +1,60 @@
+{
+    "login": {
+        "title": "Đăng Nhập"
+    },
+    "register": {
+        "title": "Đăng Ký"
+    },
+    "input": {
+        "0": {
+            "label": "Tên đăng nhập",
+            "placeholder": "Nhập tên đăng nhập của bạn"
+        },
+        "1": {
+            "label": "Mật khẩu",
+            "placeholder": "Nhập mật khẩu của bạn"
+        },
+        "2": {
+            "label": "Email",
+            "placeholder": "Nhập email của bạn"
+        },
+        "3": {
+            "label": "Tên",
+            "placeholder": "Nhập tên của bạn"
+        },
+        "4": {
+            "label": "Điện thoại",
+            "placeholder": "Nhập số điện thoại của bạn"
+        },
+        "5": {
+            "label": "Địa chỉ",
+            "placeholder": "Nhập địa chỉ của bạn"
+        }
+    },
+    "error": {
+        "username": {
+            "min": "Phải có ít nhất 4 ký tự!",
+            "max": "Phải ít hơn 15 ký tự!",
+            "required": "Tên đăng nhập là bắt buộc"
+        },
+        "password": {
+            "required": "Mật khẩu là bắt buộc"
+        },
+        "email": {
+            "email": "Email không hợp lệ",
+            "required": "Email là bắt buộc"
+        },
+        "name": {
+            "required": "Tên là bắt buộc"
+        },
+        "phone": {
+            "matches": "Số điện thoại chỉ bao gồm số",
+            "min10": "Số điện thoại phải có 10 chữ số",
+            "max": "Số điện thoại phải có 10 chữ số",
+            "required": "Số điện thoại là bắt buộc"
+        },
+        "address": {
+            "required": "Địa chỉ là bắt buộc"
+        }
+    }
+}

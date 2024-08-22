@@ -1,0 +1,7 @@
+{
+    "message": "{{type}} successfully",
+    "add": "Add"
+    login: "Login",
+    delete: "Delete",
+    update: "Update"
+}

@@ -1,0 +1,14 @@
+{
+    "message": "{{type}} thành công",
+    "action": {
+        "login": "Đăng nhập",
+        "logout": "Đăng xuất",
+        "register": "Đăng ký",
+        "add": "Thêm",
+        "delete": "Xóa",
+        "update": "Cập nhật",
+        "edit": "Sửa",
+        "save": "Lưu",
+        "cancel": "Hủy bỏ"
+    }
+}

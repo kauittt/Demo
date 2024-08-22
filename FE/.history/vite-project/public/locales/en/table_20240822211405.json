@@ -1,0 +1,23 @@
+{
+    "table": {
+        "1": "No",
+        "2": "Name",
+        "3": "Phone",
+        "4": "Contact",
+        "5": "Price",
+        "6": "Actions"
+    },
+    "desc": {
+        "label": "Customers",
+        "button": "New Customer",
+        "info": "Show on page",
+        "logout": "Logout",
+        "placeholder": "Search customers"
+    },
+    "button": {
+        "edit": "Edit",
+        "delete": "Delete"
+        "save": "Save",
+        "cancel": "Cancel"
+    }
+}

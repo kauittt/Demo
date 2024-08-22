@@ -1,0 +1,9 @@
+{
+    "message": "{{type}} thành công",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "register": "Đăng ký",
+    "add": "Thêm",
+    "delete": "Xóa",
+    "update": "Cập nhật"
+}

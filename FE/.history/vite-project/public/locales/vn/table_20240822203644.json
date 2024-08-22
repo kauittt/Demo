@@ -1,0 +1,20 @@
+{
+    "table": {
+        "id": "Mã số",
+        "name": "Tên",
+        "phone": "Điện thoại",
+        "contact": "Liên hệ",
+        "price": "Giá",
+        "actions": "Hành động"
+    },
+    "desc": {
+        "label": "Khách hàng",
+        "button": "Khách hàng mới",
+        "info": "Hiển thị trên trang",
+        "logout": "Đăng xuất"
+    },
+    "button": {
+        "edit": "Sửa",
+        "delete": "Xóa"
+    }
+}

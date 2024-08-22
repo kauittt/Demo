@@ -1,0 +1,21 @@
+{
+    "table": {
+        "1": "Mã số",
+        "2": "Tên",
+        "3": "Điện thoại",
+        "4": "Liên hệ",
+        "5": "Giá",
+        "6": "Hành động"
+    },
+    "desc": {
+        "label": "Khách hàng",
+        "button": "Khách hàng mới",
+        "info": "Hiển thị trên trang",
+        "logout": "Đăng xuất",
+        "placeholder": "Tìm khách hàng"
+    },
+    "button": {
+        "edit": "Sửa",
+        "delete": "Xóa"
+    }
+}

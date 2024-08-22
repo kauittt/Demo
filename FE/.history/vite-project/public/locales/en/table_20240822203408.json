@@ -1,0 +1,20 @@
+{
+    "table": {
+        "id": "No",
+        "name": "Name",
+        "phone": "Phone",
+        "contact": "Contact",
+        "price": "Price",
+        "actions": "Actions"
+    },
+    "description": {
+        "label": "Customers",
+        "button": "New Customer",
+        "info": "Show on page",
+        "logout": "Logout"
+    }
+    button: {
+        edit: "Edit",
+        delete: "Delete"
+    }
+}

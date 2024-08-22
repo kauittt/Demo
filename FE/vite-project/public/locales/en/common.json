@@ -1,0 +1,15 @@
+{
+    "message": "{{type}} successfully",
+    "action": {
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register",
+
+        "add": "Add",
+        "delete": "Delete",
+        "update": "Update",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel"
+    }
+}

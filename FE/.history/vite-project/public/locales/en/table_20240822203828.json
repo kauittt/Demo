@@ -1,0 +1,21 @@
+{
+    "table": {
+        "id": "No",
+        "name": "Name",
+        "phone": "Phone",
+        "contact": "Contact",
+        "price": "Price",
+        "actions": "Actions"
+    },
+    "desc": {
+        "label": "Customers",
+        "button": "New Customer",
+        "info": "Show on page",
+        "logout": "Logout"
+        placeholder: "Search customers"
+    },
+    "button": {
+        "edit": "Edit",
+        "delete": "Delete"
+    }
+}
