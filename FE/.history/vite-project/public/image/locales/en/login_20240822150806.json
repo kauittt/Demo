@@ -1,0 +1,9 @@
+{
+    "login": {
+        "title": "Login"
+    },
+    "button": {
+        "login": "Login",
+        "register": "Register"
+    }
+}

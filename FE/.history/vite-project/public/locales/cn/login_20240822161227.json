@@ -1,0 +1,64 @@
+{
+    "login": {
+        "title": "登录"
+    },
+    "register": {
+        "title": "注册"
+    },
+    "input": {
+        "0": {
+            "label": "用户名",
+            "placeholder": "请输入您的用户名"
+        },
+        "1": {
+            "label": "密码",
+            "placeholder": "请输入您的密码"
+        },
+        "2": {
+            "label": "电子邮件",
+            "placeholder": "请输入您的电子邮件"
+        },
+        "3": {
+            "label": "姓名",
+            "placeholder": "请输入您的姓名"
+        },
+        "4": {
+            "label": "电话",
+            "placeholder": "请输入您的电话号码"
+        },
+        "5": {
+            "label": "地址",
+            "placeholder": "请输入您的地址"
+        }
+    },
+    "button": {
+        "login": "登录",
+        "register": "注册"
+    },
+    "error": {
+        "username": {
+            "min": "至少需要4个字符！",
+            "max": "最多15个字符！",
+            "required": "用户名为必填项"
+        },
+        "password": {
+            "required": "密码为必填项"
+        },
+        "email": {
+            "email": "无效的电子邮件地址",
+            "required": "电子邮件为必填项"
+        },
+        "name": {
+            "required": "姓名为必填项"
+        },
+        "phone": {
+            "matches": "电话号码只能包含数字",
+            "min10": "电话号码必须是10位数字",
+            "max": "电话号码必须是10位数字",
+            "required": "电话为必填项"
+        },
+        "address": {
+            "required": "地址为必填项"
+        }
+    }
+}

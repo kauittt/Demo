@@ -1,0 +1,62 @@
+{
+    "login": {
+        "title": "Login"
+    },
+    "register": {
+        "title": "Register"
+    },
+    "input": {
+        "0": {
+            "label": "Username",
+            "placeholder": "Enter your username"
+        },
+        "1": {
+            "label": "Password",
+            "placeholder": "Enter your password"
+        },
+        "2": {
+            "label": "Email",
+            "placeholder": "Enter your email"
+        },
+        "3": {
+            "label": "Name",
+            "placeholder": "Enter your name"
+        },
+        "4": {
+            "label": "Phone",
+            "placeholder": "Enter your phone"
+        },
+        "5": {
+            "label": "Address",
+            "placeholder": "Enter your address"
+        }
+    },
+    "button": {
+        "login": "Login",
+        "register": "Register"
+    },
+    "error": {
+        "username": {
+            "min": "Must be 4 characters or more!",
+            "max": "Must be 15 characters or less!",
+            "required": "Username is required"
+        },
+        "password": {
+            "required": "Password is required"
+        },
+        "email": {
+            "email": "Invalid email",
+            "required": "Email is required"
+        },
+        "name": {
+            "required": "Name is required"
+        },
+        "phone": {
+            "matches": "Phone number must contain only numbers",
+            "min10": "Phone number must be 10 digits",
+            "max": "Phone number must be 10 digits",
+            "required": "Phone number is required"
+        },
+        "address": {}
+    }
+}

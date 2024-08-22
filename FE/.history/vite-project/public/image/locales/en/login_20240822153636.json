@@ -1,0 +1,48 @@
+{
+    "login": {
+        "title": "Login",
+        "inputs": [
+            {
+                "label": "Username",
+                "placeholder": "Enter your username"
+            },
+            {
+                "label": "Password",
+                "placeholder": "Enter your password"
+            }
+        ]
+    },
+    "register": {
+        "title": "Register",
+        "inputs": [
+            {
+                "label": "Username",
+                "placeholder": "Enter your username"
+            },
+            {
+                "label": "Password",
+                "placeholder": "Enter your password"
+            },
+            {
+                "label": "Email",
+                "placeholder": "Enter your email"
+            },
+            {
+                "label": "Name",
+                "placeholder": "Enter your name"
+            },
+            {
+                "label": "Phone",
+                "placeholder": "Enter your phone"
+            },
+            {
+                "label": "Address",
+                "placeholder": "Enter your address"
+            }
+        ]
+    },
+    "button": {
+        "login": "Login",
+        "register": "Register"
+    }
+}

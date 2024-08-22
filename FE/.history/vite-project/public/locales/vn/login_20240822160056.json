@@ -1,0 +1,38 @@
+{
+    "login": {
+        "title": "Đăng Nhập"
+    },
+    "register": {
+        "title": "Đăng Ký"
+    },
+    "input": {
+        "0": {
+            "label": "Tên đăng nhập",
+            "placeholder": "Nhập tên đăng nhập của bạn"
+        },
+        "1": {
+            "label": "Mật khẩu",
+            "placeholder": "Nhập mật khẩu của bạn"
+        },
+        "2": {
+            "label": "Email",
+            "placeholder": "Nhập email của bạn"
+        },
+        "3": {
+            "label": "Tên",
+            "placeholder": "Nhập tên của bạn"
+        },
+        "4": {
+            "label": "Điện thoại",
+            "placeholder": "Nhập số điện thoại của bạn"
+        },
+        "5": {
+            "label": "Địa chỉ",
+            "placeholder": "Nhập địa chỉ của bạn"
+        }
+    },
+    "button": {
+        "login": "Đăng Nhập",
+        "register": "Đăng Ký"
+    }
+}

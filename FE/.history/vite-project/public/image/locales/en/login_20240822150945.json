@@ -1,0 +1,16 @@
+{
+    "login": {
+        "title": "Login"
+        input1: {
+            label: "Username",
+            placeholder: "Enter your username"
+        }
+    },
+    "register": {
+        "title": "Register"
+    },
+    "button": {
+        "login": "Login",
+        "register": "Register"
+    }
+}

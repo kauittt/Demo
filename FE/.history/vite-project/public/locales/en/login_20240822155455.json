@@ -1,0 +1,39 @@
+{
+    "login": {
+        "title": "Login"
+    },
+    "register": {
+        "title": "Register"
+    },
+    input: {
+        "1":
+            {
+                "label": "Username",
+                "placeholder": "Enter your username"
+            },
+        "2":    {
+                "label": "Password",
+                "placeholder": "Enter your password"
+            },
+        3:    {
+                "label": "Email",
+                "placeholder": "Enter your email"
+            },
+        4:    {
+                "label": "Name",
+                "placeholder": "Enter your name"
+            },
+        5:    {
+                "label": "Phone",
+                "placeholder": "Enter your phone"
+            },
+        6    {
+                "label": "Address",
+                "placeholder": "Enter your address"
+            }
+    }
+    "button": {
+        "login": "Login",
+        "register": "Register"
+    }
+}
